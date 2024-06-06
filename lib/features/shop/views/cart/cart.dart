@@ -7,7 +7,6 @@ import 'package:store/common/widgets/appbar/appbar.dart';
 import 'package:store/common/widgets/product_item/item_card_horizontal.dart';
 import 'package:store/features/shop/controllers/cart_controller.dart';
 import 'package:store/features/shop/views/checkout/checkout.dart';
-import 'package:store/features/shop/views/product_details/widget/remove_and_add.dart';
 import 'package:store/features/shop/views/product_details/widget/remove_and_add_in_cart.dart';
 
 class CartScreen extends StatelessWidget {
@@ -25,12 +24,15 @@ class CartScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const CheckoutScreen(),
+                builder: (context) =>
+                    CheckoutScreen(cartItems: controller.cartItems),
               ),
             );
           },
-          child: Text('Checkout \$${controller.totalCartPrice}',
-              style: Theme.of(context).textTheme.headlineSmall),
+          child: Obx(
+            () => Text('Checkout \$${controller.totalCartPrice}',
+                style: Theme.of(context).textTheme.headlineSmall),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -45,9 +47,9 @@ class CartScreen extends StatelessWidget {
               ),
             ),
             Obx(
-              () => SizedBox(
+              () => Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height - 170,
                 child: ListView.builder(
                   itemCount: controller.cartItems.length,
                   itemBuilder: (context, index) {
@@ -60,49 +62,42 @@ class CartScreen extends StatelessWidget {
                           color: Colors.grey,
                         ),
                       ),
-                      child: Obx(
-                        () => Column(
-                          children: [
-                            controller.getProductQuantityInCart(controller
-                                        .cartItems[index].productId) !=
-                                    0
-                                ? Column(
-                                    children: [
-                                      ItemCardHorizontal(
-                                        itemCart: controller.cartItems[index],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                top: 10, left: 60),
-                                            child: RemoveAndAddProductInCart(
-                                                controller.cartItems[index]),
-                                          ),
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                              left: 100,
-                                              top: 16,
-                                            ),
-                                            child: Text(
-                                              (controller.cartItems[index]
-                                                          .price *
-                                                      controller
-                                                          .cartItems[index]
-                                                          .quantity)
-                                                  .toString(),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headlineSmall,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  )
-                                : Container(),
-                          ],
-                        ),
+                      child: Column(
+                        children: [
+                          // controller.getProductQuantityInCart(
+                          //             controller.cartItems[index].productId) !=
+                          //         0
+                          // ?
+
+                          ItemCardHorizontal(
+                            itemCart: controller.cartItems[index],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                margin:
+                                    const EdgeInsets.only(top: 10, left: 60),
+                                child: RemoveAndAddProductInCart(
+                                    controller.cartItems[index]),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  left: 100,
+                                  top: 16,
+                                ),
+                                child: Text(
+                                  (controller.cartItems[index].price *
+                                          controller.cartItems[index].quantity)
+                                      .toString(),
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          //: Container(),
+                        ],
                       ),
                     );
                   },

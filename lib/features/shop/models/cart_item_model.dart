@@ -46,4 +46,6 @@ class CartItemModel {
       brandName: json['brandName'],
     );
   }
+
+  
 }

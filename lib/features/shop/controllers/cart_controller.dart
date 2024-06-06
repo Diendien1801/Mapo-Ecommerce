@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:store/features/shop/models/cart_item_model.dart';
 import 'package:store/features/shop/models/product_model.dart';
+import 'package:store/naviga_menu.dart';
 import 'package:store/utils/storage/storage_utility.dart';
 
 class CartController extends GetxController {
@@ -134,5 +135,12 @@ class CartController extends GetxController {
     if (productQuantityInCart.value < 0) {
       productQuantityInCart.value = 0;
     }
+  }
+
+  void placeOrder() {
+    // Place order logic
+    //clearCart();
+    Get.snackbar('Done!', 'Thank you for your order!');
+    Get.offAll(() => NavigationMenu());
   }
 }

@@ -1,29 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:store/common/widgets/appbar/appbar.dart';
+import 'package:store/common/widgets/order_overview/order_overview.dart';
 import 'package:store/common/widgets/product_item/item_card_horizontal.dart';
+import 'package:store/features/shop/controllers/cart_controller.dart';
+import 'package:store/features/shop/controllers/order_controller.dart';
+import 'package:store/features/shop/models/cart_item_model.dart';
+import 'package:store/naviga_menu.dart';
 import 'package:store/utils/constants/colors.dart';
 
 class CheckoutScreen extends StatelessWidget {
-  const CheckoutScreen({super.key});
+  final List<CartItemModel> cartItems;
+  const CheckoutScreen({super.key, required this.cartItems});
   @override
   Widget build(BuildContext context) {
+    final controller = CartController.instance;
+    final orderController = Get.put(OrderController());
     return Scaffold(
-      bottomNavigationBar: Container(
-        height: 60,
-        margin: const EdgeInsets.all(10),
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          color: TColors.primary,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
+      bottomNavigationBar: InkWell(
+        onTap: () {
+          orderController.placeOrder();
+        },
+        child: Container(
+          height: 60,
+          margin: const EdgeInsets.all(10),
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            color: TColors.primary,
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
           ),
-        ),
-        child: Center(
-          child: Text(
-            'Place Order',
-            style: Theme.of(context).textTheme.headlineSmall!.apply(
-                  color: TColors.white,
-                ),
+          child: Center(
+            child: Text(
+              'Place Order',
+              style: Theme.of(context).textTheme.headlineSmall!.apply(
+                    color: TColors.white,
+                  ),
+            ),
           ),
         ),
       ),
@@ -50,11 +65,25 @@ class CheckoutScreen extends StatelessWidget {
                 ),
               ),
               child: ListView.builder(
-                itemCount: 3,
+                itemCount: cartItems.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.all(10),
-                    // child: const ItemCardHorizontal(),
+                  return Row(
+                    children: [
+                      Container(
+                        width: 300,
+                        margin: const EdgeInsets.all(10),
+                        child: ItemCardHorizontal(
+                          itemCart: cartItems[index],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(10),
+                        child: Text(
+                          'x${cartItems[index].quantity}',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      )
+                    ],
                   );
                 },
               ),
@@ -112,140 +141,99 @@ class CheckoutScreen extends StatelessWidget {
                   color: Colors.grey,
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 30,
-                    child: ListTile(
-                      title: Text(
-                        'Subtotal',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      trailing: Text(
-                        '\$ 100',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+              child: Obx(
+                () => Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    OrderOverview(
+                        totalCartPrice: controller.totalCartPrice.toDouble()),
+                    Container(
+                      margin:
+                          const EdgeInsets.only(top: 40, right: 20, left: 20),
+                      height: 1,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.grey,
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                    child: ListTile(
-                      title: Text(
-                        'Shipping Fee',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      trailing: Text(
-                        '\$ 10',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                    child: ListTile(
-                      title: Text(
-                        'Tax Fee',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      trailing: Text(
-                        '\$ 10',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                    child: ListTile(
-                      title: Text(
-                        'Total',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      trailing: Text(
-                        '\$ 120',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 40, right: 20, left: 20),
-                    height: 1,
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.grey,
-                  ),
-                  // PAYMENT
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(left: 20, top: 20),
-                            child: Text(
-                              'Payment Method',
-                              style: Theme.of(context).textTheme.headlineSmall,
+                    // PAYMENT
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(left: 20, top: 20),
+                              child: Text(
+                                'Payment Method',
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall,
+                              ),
                             ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 20, right: 20),
-                            child: Text(
-                              'Change',
-                              style:
-                                  Theme.of(context).textTheme.bodyLarge!.apply(
-                                        color: TColors.primary,
-                                      ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 20, right: 20),
+                              child: Text(
+                                'Change',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .apply(
+                                      color: TColors.primary,
+                                    ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 40, top: 10),
-                        child: Image.asset(
-                          'assets/logos/visa.png',
-                          height: 50,
-                          width: 50,
+                          ],
                         ),
-                      )
-                    ],
-                  ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 40, top: 10),
+                          child: Image.asset(
+                            'assets/logos/visa.png',
+                            height: 50,
+                            width: 50,
+                          ),
+                        )
+                      ],
+                    ),
 
-                  // ADDRESS
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(left: 20, top: 20),
-                            child: Text(
-                              'Shipping Address',
-                              style: Theme.of(context).textTheme.headlineSmall,
+                    // ADDRESS
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(left: 20, top: 20),
+                              child: Text(
+                                'Shipping Address',
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall,
+                              ),
                             ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 20, right: 20),
-                            child: Text(
-                              'Change',
-                              style:
-                                  Theme.of(context).textTheme.bodyLarge!.apply(
-                                        color: TColors.primary,
-                                      ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 20, right: 20),
+                              child: Text(
+                                'Change',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .apply(
+                                      color: TColors.primary,
+                                    ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 20, top: 10),
-                        child: Text(
-                          '1234 Main Street, New York, NY 10001',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                ],
+                        Container(
+                          margin: const EdgeInsets.only(left: 20, top: 10),
+                          child: Text(
+                            '1234 Main Street, New York, NY 10001',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
