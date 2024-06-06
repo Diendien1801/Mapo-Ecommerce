@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:store/common/widgets/brand_name/brand_name_with_icon.dart';
 import 'package:store/features/shop/models/cart_item_model.dart';
 
+// ignore: must_be_immutable
 class ItemCardHorizontal extends StatelessWidget {
   CartItemModel itemCart;
   ItemCardHorizontal({
@@ -27,7 +28,7 @@ class ItemCardHorizontal extends StatelessWidget {
             fit: BoxFit.contain,
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

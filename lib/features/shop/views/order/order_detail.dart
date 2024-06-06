@@ -6,14 +6,15 @@ import 'package:store/common/widgets/product_item/item_card_horizontal.dart';
 
 import 'package:store/features/shop/models/cart_item_model.dart';
 
+// ignore: must_be_immutable
 class OrderDetail extends StatelessWidget {
   List<CartItemModel> cartItems;
   String? time;
   OrderDetail({
-    Key? key,
+    super.key,
     required this.cartItems,
     required this.time,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class OrderDetail extends StatelessWidget {
             children: [
               // Delivery time
               Container(
-                margin: EdgeInsets.only(left: 24),
+                margin: const EdgeInsets.only(left: 24),
                 child: Text(
                   'Expected delivery date: ${time}',
                   style: Theme.of(context).textTheme.bodyLarge,
@@ -46,7 +47,7 @@ class OrderDetail extends StatelessWidget {
               ),
               // Delivery address
               Container(
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 height: 100,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -61,7 +62,7 @@ class OrderDetail extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(left: 24),
+                margin: const EdgeInsets.only(left: 24),
                 child: Text(
                   'Order Items',
                   style: Theme.of(context).textTheme.titleLarge,
@@ -69,7 +70,7 @@ class OrderDetail extends StatelessWidget {
               ),
               // Order items
               Container(
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: cartItems.length,
@@ -78,8 +79,8 @@ class OrderDetail extends StatelessWidget {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(bottom: 10),
-                          padding: EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
@@ -109,7 +110,7 @@ class OrderDetail extends StatelessWidget {
               ),
               // COntact
               Container(
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 height: 80,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -125,11 +126,11 @@ class OrderDetail extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 20),
-                          child: Icon(Icons.chat_bubble_outline),
+                          margin: const EdgeInsets.only(left: 20),
+                          child: const Icon(Icons.chat_bubble_outline),
                         ),
                         Container(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           child: Text(
                             'Contact with Mapo',
                             style: Theme.of(context).textTheme.headlineSmall,
@@ -139,7 +140,7 @@ class OrderDetail extends StatelessWidget {
                     ),
                     // sub title
                     Container(
-                      margin: EdgeInsets.only(left: 20),
+                      margin: const EdgeInsets.only(left: 20),
                       child: Text(
                         'Account, Payment, Delivery',
                         style: Theme.of(context).textTheme.bodySmall,

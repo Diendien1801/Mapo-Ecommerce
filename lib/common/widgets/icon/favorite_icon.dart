@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:store/features/shop/controllers/favourite_controller.dart';
 
+// ignore: must_be_immutable
 class FavouriteIcon extends StatelessWidget {
   String productId;
   FavouriteIcon({

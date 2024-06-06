@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:store/common/widgets/appbar/appbar.dart';
 import 'package:store/common/widgets/order_overview/order_overview.dart';
 import 'package:store/common/widgets/product_item/item_card_horizontal.dart';
 import 'package:store/features/shop/controllers/cart_controller.dart';
 import 'package:store/features/shop/controllers/order_controller.dart';
 import 'package:store/features/shop/models/cart_item_model.dart';
-import 'package:store/naviga_menu.dart';
 import 'package:store/utils/constants/colors.dart';
 
 class CheckoutScreen extends StatelessWidget {

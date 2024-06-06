@@ -31,4 +31,11 @@ class BannerModel {
       return BannerModel.empty();
     }
   }
+
+  factory BannerModel.fromJson(Map<String, dynamic> json) {
+    return BannerModel(
+      id: json['id'] ?? "",
+      image: json['image'] ?? "",
+    );
+  }
 }

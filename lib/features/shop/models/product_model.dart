@@ -2,14 +2,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class ProductModel {
   String id;
   int stock;
   double price;
   String title;
   double salePercentage;
-  
+
   bool? isFeatured;
   String brand;
   String description;
@@ -78,6 +77,22 @@ class ProductModel {
       categoryId: data['categoryId'],
       image: data['image'],
       productType: data['productType'],
+    );
+  }
+
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
+      id: json['id'],
+      stock: json['stock'],
+      price: json['price'],
+      title: json['title'],
+      salePercentage: json['salePercentage'],
+      isFeatured: json['isFeatured'],
+      brand: json['brand'],
+      description: json['description'],
+      categoryId: json['categoryId'],
+      image: json['image'],
+      productType: json['productType'],
     );
   }
 }

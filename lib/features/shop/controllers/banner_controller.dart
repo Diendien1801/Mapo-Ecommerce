@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:store/data/repositories/banners/banner_repository.dart';
 import 'package:store/data/services/firebase_storage_service.dart';
 import 'package:store/features/shop/models/banner_model.dart';
+import 'package:store/utils/storage/storage_utility.dart';
 
 class BannerController extends GetxController {
   static BannerController get instance => Get.find();
@@ -21,11 +22,27 @@ class BannerController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchBanners();
+    loadDataFromLocalStorage();
+    if (monthlyBanners.isEmpty) {
+      fetchBanners();
+    }
+  }
+
+  void loadDataFromLocalStorage() {
+    
+    final data = MyLocalStorage.instance().readData('monthlyBanners');
+    if (data != null) {
+      final banners = data.map((e) => BannerModel.fromJson(e)).toList();
+      monthlyBanners.clear();
+      for (var banner in banners) {
+        monthlyBanners.add(banner);
+      }
+    }
   }
 
   Future<void> fetchBanners() async {
     try {
+      
       // Fetch categories from data source
       final banners = await bannerRepository.fetchAllBanners();
 
@@ -36,10 +53,14 @@ class BannerController extends GetxController {
       final random = Random();
       final selectedBanners = allBanners.toList()..shuffle(random);
       monthlyBanners.assignAll(selectedBanners.take(3));
+
+      MyLocalStorage.instance().writeData('monthlyBanners',
+          monthlyBanners.map((element) => element.toJson()).toList());
+
       // featuredCategories.assignAll(categories);
       // print(featuredCategories);
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -60,7 +81,7 @@ class BannerController extends GetxController {
         await _db.collection('Banners').doc(banner.id).set(banner.toJson());
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

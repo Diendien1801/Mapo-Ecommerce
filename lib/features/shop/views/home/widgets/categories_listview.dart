@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store/features/shop/controllers/category_controller.dart';
 import 'package:store/features/shop/views/product/product.dart';
 import 'package:store/utils/constants/colors.dart';
+import 'package:store/utils/effect/shimmer_effect.dart';
 
 class CategoriesListview extends StatelessWidget {
   const CategoriesListview({
@@ -72,6 +72,20 @@ class CategoriesListview extends StatelessWidget {
                                   (category.image),
                                   height: 30,
                                   width: 30,
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) =>
+                                          loadingProgress == null
+                                              ? child
+                                              : Center(
+                                                  child: Column(
+                                                    children: [
+                                                      ShimmerEffect(
+                                                          width: 50,
+                                                          height: 50,
+                                                          radius: 50),
+                                                    ],
+                                                  ),
+                                                ),
                                 ),
                               ),
                             ),

@@ -42,4 +42,14 @@ class CategoryModel {
       return CategoryModel.empty();
     }
   }
+
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      parentId: json['parentId'],
+      isFeatured: json['isFeatured'],
+    );
+  }
 }

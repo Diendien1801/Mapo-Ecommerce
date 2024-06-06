@@ -6,10 +6,9 @@ class MyLocalStorage {
   // Singleton instance
   static MyLocalStorage? _instance;
 
-  MyLocalStorage._internal(); // ??
+  MyLocalStorage._internal() {} // ??
 
-  factory MyLocalStorage.instance()
-  {
+  factory MyLocalStorage.instance() {
     _instance ??= MyLocalStorage._internal();
     return _instance!;
   }
@@ -21,7 +20,7 @@ class MyLocalStorage {
   }
 
   // Generic method to save data
-  Future<void> writeData<T>(String key, T value) async{
+  Future<void> writeData<T>(String key, T value) async {
     await _storage.write(key, value);
   }
 

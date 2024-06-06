@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:store/data/services/firebase_storage_service.dart';
@@ -9,6 +10,7 @@ import 'package:store/features/shop/models/product_model.dart';
 class ProductRepository extends GetxController {
   static ProductRepository get instance => ProductRepository();
   final _db = FirebaseFirestore.instance;
+  
 
   /// Get limidted featured products
   Future<List<ProductModel>> getRandomProducts() async {
@@ -21,12 +23,12 @@ class ProductRepository extends GetxController {
       return randomProducts
           .map((doc) => ProductModel.fromSnapshot(doc))
           .toList();
-    } on FirebaseException catch (e) {
-      throw e;
-    } on PlatformException catch (e) {
-      throw e;
+    } on FirebaseException {
+      rethrow;
+    } on PlatformException {
+      rethrow;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -38,12 +40,12 @@ class ProductRepository extends GetxController {
       return snapshot.docs
           .map((doc) => ProductModel.fromSnapshot(doc))
           .toList();
-    } on FirebaseException catch (e) {
-      throw e;
-    } on PlatformException catch (e) {
-      throw e;
+    } on FirebaseException {
+      rethrow;
+    } on PlatformException {
+      rethrow;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -57,14 +59,16 @@ class ProductRepository extends GetxController {
 
       final list =
           snapshot.docs.map((doc) => ProductModel.fromSnapshot(doc)).toList();
-      print(list);
+      if (kDebugMode) {
+        print(list);
+      }
       return list;
-    } on FirebaseException catch (e) {
-      throw e;
-    } on PlatformException catch (e) {
-      throw e;
+    } on FirebaseException {
+      rethrow;
+    } on PlatformException {
+      rethrow;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -86,7 +90,7 @@ class ProductRepository extends GetxController {
         await _db.collection('Products').doc(product.id).set(product.toJson());
       }
     } catch (e) {
-      throw e;
+      rethrow;
     } finally {}
   }
 }

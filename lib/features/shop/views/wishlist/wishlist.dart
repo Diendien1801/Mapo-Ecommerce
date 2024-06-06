@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:store/common/widgets/appbar/appbar.dart';
 import 'package:store/common/widgets/product_item/item_card.dart';
 import 'package:store/features/shop/controllers/favourite_controller.dart';
-import 'package:store/features/shop/models/product_model.dart';
 import 'package:store/utils/helpers/helper_functions.dart';
 
 class WishListScreen extends StatelessWidget {
@@ -39,11 +37,11 @@ class WishListScreen extends StatelessWidget {
                   future: favController.favoriteProducts(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else {
                       final products = snapshot.data!;
                       return GridView.builder(
-                        itemCount: products!.length,
+                        itemCount: products.length,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         gridDelegate:
@@ -55,7 +53,7 @@ class WishListScreen extends StatelessWidget {
                         ),
                         itemBuilder: (context, index) {
                           return ItemCard(
-                              dark: dark, product: products![index]);
+                              dark: dark, product: products[index]);
                         },
                       );
                     }

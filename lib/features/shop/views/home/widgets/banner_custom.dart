@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:store/common/widgets/custom_shapes/circular_container.dart';
 import 'package:store/features/shop/controllers/banner_controller.dart';
 import 'package:store/utils/constants/colors.dart';
+import 'package:store/utils/effect/shimmer_effect.dart';
 
 class BannerCustom extends StatelessWidget {
   const BannerCustom({super.key});
@@ -49,6 +50,19 @@ class BannerCustom extends StatelessWidget {
                       child: Image.network(
                         i.image,
                         fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) =>
+                            loadingProgress == null
+                                ? child
+                                : Center(
+                                    child: Column(
+                                      children: [
+                                        ShimmerEffect(
+                                            width: 400,
+                                            height: 170,
+                                            radius: 20),
+                                      ],
+                                    ),
+                                  ),
                       ),
                     );
                   },

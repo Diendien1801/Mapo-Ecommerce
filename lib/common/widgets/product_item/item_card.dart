@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:store/common/widgets/brand_name/brand_name_with_icon.dart';
 import 'package:store/common/widgets/button/add_to_cart_button.dart';
 import 'package:store/common/widgets/icon/favorite_icon.dart';
 import 'package:store/common/widgets/sale_tag/sale_tag.dart';
-import 'package:store/features/shop/controllers/favourite_controller.dart';
 import 'package:store/features/shop/models/product_model.dart';
 import 'package:store/features/shop/views/product_details/product_detail.dart';
+import 'package:store/utils/effect/shimmer_effect.dart';
 
 class ItemCard extends StatelessWidget {
-   ItemCard({
+  const ItemCard({
     super.key,
     required this.dark,
     required this.product,
@@ -19,7 +18,6 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Stack(
       children: [
         Container(
@@ -59,6 +57,17 @@ class ItemCard extends StatelessWidget {
             child: Image.network(
               product.image,
               fit: BoxFit.contain,
+              loadingBuilder: (context, child, loadingProgress) =>
+                  loadingProgress == null
+                      ? child
+                      : Center(
+                          child: Column(
+                            children: [
+                              ShimmerEffect(
+                                  width: 180, height: 180, radius: 20),
+                            ],
+                          ),
+                        ),
             ),
           ),
         ),
@@ -93,9 +102,10 @@ class ItemCard extends StatelessWidget {
 
         // favourite icon
         Positioned(
-        right: 30,
-        top: 14,
-        child: FavouriteIcon(productId:product.id),),
+          right: 30,
+          top: 14,
+          child: FavouriteIcon(productId: product.id),
+        ),
         // BUTTON Add to cart
         Positioned(
           bottom: 0,

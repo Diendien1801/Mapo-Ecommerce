@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:store/data/repositories/categories/category_repository.dart';
 import 'package:store/data/services/firebase_storage_service.dart';
 import 'package:store/features/shop/models/category_model.dart';
+import 'package:store/utils/storage/storage_utility.dart';
 
 class CategoryController extends GetxController {
   static CategoryController get instance => Get.find();
@@ -15,12 +17,35 @@ class CategoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchCategories();
+    //loadDataFromLocalStorage();
+    if (allCategories.isEmpty) {
+      fetchCategories();
+    }
   }
 
-  /// -- Load category data
+  /// Load data from local storage
+  void loadDataFromLocalStorage() {
+    print('load cate');
+    final data = MyLocalStorage.instance().readData('allCategories');
+    if (data != null) {
+      allCategories.assignAll(
+          (data as List).map((e) => CategoryModel.fromJson(e)).toList());
+    }
+    final featuredData =
+        MyLocalStorage.instance().readData('featuredCategories');
+    if (featuredData != null) {
+      featuredCategories.assignAll((featuredData as List)
+          .map((e) => CategoryModel.fromJson(e))
+          .toList());
+    }
+  }
+
+  /// -- Fetch data from Database
   Future<void> fetchCategories() async {
     try {
+      if (kDebugMode) {
+        print('fetch cate');
+      }
       // Show loader white loading categories
       isLoading.value = true;
       // Fetch categories from data source
@@ -28,10 +53,16 @@ class CategoryController extends GetxController {
 
       // Update the categories list
       allCategories.assignAll(categories);
-     
+
       // filter feature categories
       featuredCategories.assignAll(allCategories.where((category) =>
           category.isFeatured == true && category.parentId.isEmpty));
+
+      // final storage = MyLocalStorage.instance();
+      // storage.writeData('allCategories',
+      //     categories.map((element) => element.toJson()).toList());
+      // storage.writeData('featuredCategories',
+      //     featuredCategories.map((element) => element.toJson()).toList());
       // featuredCategories.assignAll(categories);
       // print(featuredCategories);
     } catch (e) {

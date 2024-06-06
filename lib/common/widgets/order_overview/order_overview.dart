@@ -1,12 +1,11 @@
-import "dart:ffi";
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
+// ignore: must_be_immutable
 class OrderOverview extends StatelessWidget {
   double totalCartPrice;
 
-  OrderOverview({required this.totalCartPrice});
+  OrderOverview({super.key, required this.totalCartPrice});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class OrderOverview extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             trailing: Text(
-              '\$ ${totalCartPrice}',
+              '\$ $totalCartPrice',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),

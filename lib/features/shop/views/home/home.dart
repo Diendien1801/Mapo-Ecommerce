@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                     : Colors.black,
                 width: MediaQuery.of(context).size.width,
                 child: GridView.builder(
-                  itemCount: controller.randomProducts.length,
+                  itemCount: controller.allProducts.length,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -103,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   itemBuilder: (context, index) {
                     return ItemCard(
-                        dark: dark, product: controller.randomProducts[index]);
+                        dark: dark, product: controller.allProducts[index]);
                   },
                 ),
               ),

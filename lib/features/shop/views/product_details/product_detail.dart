@@ -9,12 +9,13 @@ import 'package:store/features/shop/controllers/cart_controller.dart';
 import 'package:store/features/shop/models/product_model.dart';
 import 'package:store/features/shop/views/product_details/widget/remove_and_add.dart';
 
+// ignore: must_be_immutable
 class ProductDetailScreen extends StatefulWidget {
   ProductModel productModel;
   ProductDetailScreen({
-    Key? key,
+    super.key,
     required this.productModel,
-  }) : super(key: key);
+  });
   @override
   // ignore: library_private_types_in_public_api
   _ProductDetailScreenState createState() => _ProductDetailScreenState();

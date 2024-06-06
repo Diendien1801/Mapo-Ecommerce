@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:store/common/widgets/brand_name/brand_name_with_icon.dart';
-import 'package:store/features/shop/controllers/product_controller.dart';
 import 'package:store/features/shop/models/brand_model.dart';
+import 'package:store/utils/effect/shimmer_effect.dart';
 
 // ignore: must_be_immutable
 class BrandCard extends StatelessWidget {
@@ -34,9 +34,20 @@ class BrandCard extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(left: 10),
                 child: Image(
-                  image: NetworkImage(brandModel.image)  ,
+                  image: NetworkImage(brandModel.image),
                   height: 40,
                   width: 40,
+                  loadingBuilder: (context, child, loadingProgress) =>
+                      loadingProgress == null
+                          ? child
+                          : Center(
+                              child: Column(
+                                children: [
+                                  ShimmerEffect(
+                                      width: 38, height: 38, radius: 10),
+                                ],
+                              ),
+                            ),
                 ),
               ),
               Column(
