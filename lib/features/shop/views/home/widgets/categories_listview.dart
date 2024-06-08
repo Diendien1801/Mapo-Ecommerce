@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store/features/shop/controllers/category_controller.dart';
@@ -68,6 +69,19 @@ class CategoriesListview extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(100),
                               ),
                               child: Center(
+//                                 child:CachedNetworkImage(
+//   imageUrl: category.image,
+//   placeholder: (context, url) => CircularProgressIndicator(),
+//   errorWidget: (context, url, error) => Icon(Icons.error),
+//   imageBuilder: (context, imageProvider) => Container(
+//     decoration: BoxDecoration(
+//       image: DecorationImage(
+//         image: imageProvider,
+//         fit: BoxFit.contain,
+//       ),
+//     ),
+//   )
+// ),
                                 child: Image.network(
                                   (category.image),
                                   height: 30,

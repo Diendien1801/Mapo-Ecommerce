@@ -39,17 +39,21 @@ class SignupController extends GetxController {
       if (!isConnected) {
         Get.snackbar(
             "No Internet Connection", "Please check your internet connection");
+        FullScreenLoader.stopLoading();
         return;
       }
 
       // Form validation   validate() help every validator in the form to run
-      if (signUpFormKey.currentState!.validate()) {
+      if (!signUpFormKey.currentState!.validate()) {
+        FullScreenLoader.stopLoading();
         return;
       }
-      // Check box to be checked / accept terms and conditions
+
+      //Check box to be checked / accept terms and conditions
       if (isCheck.value == false) {
         Get.snackbar(
             "Error", "Please accept the Privacy Policy and Terms of use");
+        FullScreenLoader.stopLoading();
         return;
       }
 
@@ -71,15 +75,14 @@ class SignupController extends GetxController {
       await userRepository.saveUserRecord(newUser);
 
       FullScreenLoader.stopLoading();
-      Get.snackbar("Success", "User Registered Successfully");
       Get.to(
         () => VerifyEmailScreen(
           email: email.text.trim(),
         ),
       );
+      Get.snackbar("Success", "User Registered Successfully");
     } catch (e) {
       Get.snackbar("Error", e.toString());
-    } finally {
       FullScreenLoader.stopLoading();
     }
   }

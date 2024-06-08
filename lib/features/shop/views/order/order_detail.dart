@@ -70,36 +70,46 @@ class OrderDetail extends StatelessWidget {
               ),
               // Order items
               Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.grey,
+                  ),
+                ),
                 margin: const EdgeInsets.all(20),
                 child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: cartItems.length,
                   itemBuilder: (context, index) {
-                    return Stack(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.only(bottom: 10),
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Colors.grey,
+                    return Container(
+                      margin: EdgeInsets.all(10),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            child: ItemCardHorizontal(
+                              itemCart: cartItems[index],
                             ),
                           ),
-                          child: ItemCardHorizontal(
-                            itemCart: cartItems[index],
-                          ),
-                        ),
-                        Positioned(
-                          right: 20,
-                          top: 20,
-                          child: Text(
-                            'x ${cartItems[index].quantity}',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        )
-                      ],
+                          Positioned(
+                            right: 20,
+                            top: 20,
+                            child: Text(
+                              'x ${cartItems[index].quantity}',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          )
+                        ],
+                      ),
                     );
                   },
                 ),

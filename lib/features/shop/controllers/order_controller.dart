@@ -20,12 +20,14 @@ class OrderController extends GetxController {
     );
     if (cartItemsInOrderSub != null) {
       List<CartItemModel> flattenedList = [];
-      cartItemsInOrderSub.forEach((cartItemList) {
-        cartItemList.forEach((item) {
-          flattenedList.add(CartItemModel.fromJson(item));
-        });
-      });
-      cartItemsInOrder.assign(flattenedList);
+      for (var cartItemList in cartItemsInOrderSub) {
+        for (var cartItem in cartItemList) {
+          flattenedList.add(CartItemModel.fromJson(cartItem));
+        }
+        cartItemsInOrder.add(flattenedList);
+        flattenedList = [];
+      }
+
       List<dynamic>? data = MyLocalStorage.instance().readData<List<dynamic>>(
         'TimeOrder',
       );
@@ -33,25 +35,7 @@ class OrderController extends GetxController {
         timeOrder.assignAll(data.cast<String>());
       }
     }
-  }
-
-  void saveOrders() {
-    // Save orders to the database
-    List<List<Map<String, dynamic>>> jsonList =
-        cartItemsInOrder.map((cartItemList) {
-      return cartItemList.map((cartItem) {
-        return cartItem
-            .toJson(); // Assuming you have a toJson method in CartItemModel
-      }).toList();
-    }).toList();
-    MyLocalStorage.instance().writeData(
-      'Orders',
-      jsonList,
-    );
-    MyLocalStorage.instance().writeData(
-      'TimeOrder',
-      timeOrder,
-    );
+    print(cartItemsInOrder.length);
   }
 
   void placeOrder() {
@@ -66,6 +50,35 @@ class OrderController extends GetxController {
     saveOrders();
     // Place order
 
+    Get.snackbar('Thank you', 'Your order has been placed');
+    Get.offAll(() => NavigationMenu());
+  }
+
+  void saveOrders() {
+    // Save orders to the database
+    List<List<Map<String, dynamic>>> jsonList =
+        cartItemsInOrder.map((cartItemList) {
+      return cartItemList.map((cartItem) {
+        return cartItem.toJson();
+      }).toList();
+    }).toList();
+    MyLocalStorage.instance().writeData(
+      'Orders',
+      jsonList,
+    );
+    MyLocalStorage.instance().writeData(
+      'TimeOrder',
+      timeOrder,
+    );
+  }
+
+  void placeOrderForDetailCheckOut(CartItemModel cartItem) {
+    var tempList = [cartItem];
+    cartItemsInOrder.add(tempList);
+    String date = getDate();
+    timeOrder.add(date);
+    saveOrders();
+    print(cartItemsInOrder.length);
     Get.snackbar('Thank you', 'Your order has been placed');
     Get.offAll(() => NavigationMenu());
   }

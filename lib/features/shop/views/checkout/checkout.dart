@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:store/common/widgets/appbar/appbar.dart';
 import 'package:store/common/widgets/order_overview/order_overview.dart';
 import 'package:store/common/widgets/product_item/item_card_horizontal.dart';
@@ -9,8 +11,15 @@ import 'package:store/features/shop/models/cart_item_model.dart';
 import 'package:store/utils/constants/colors.dart';
 
 class CheckoutScreen extends StatelessWidget {
-  final List<CartItemModel> cartItems;
-  const CheckoutScreen({super.key, required this.cartItems});
+  bool isFromDetail;
+  final List<CartItemModel>? cartItems;
+  final CartItemModel? cartItemFromDetail;
+  CheckoutScreen({
+    super.key,
+    required this.isFromDetail,
+    this.cartItems,
+    this.cartItemFromDetail,
+  });
   @override
   Widget build(BuildContext context) {
     final controller = CartController.instance;
@@ -18,7 +27,11 @@ class CheckoutScreen extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: InkWell(
         onTap: () {
-          orderController.placeOrder();
+          if (isFromDetail)
+            orderController.placeOrderForDetailCheckOut(cartItemFromDetail!);
+          else {
+            orderController.placeOrder();
+          }
         },
         child: Container(
           height: 60,
@@ -63,7 +76,7 @@ class CheckoutScreen extends StatelessWidget {
                 ),
               ),
               child: ListView.builder(
-                itemCount: cartItems.length,
+                itemCount: isFromDetail ? 1 : cartItems!.length,
                 itemBuilder: (context, index) {
                   return Row(
                     children: [
@@ -71,15 +84,20 @@ class CheckoutScreen extends StatelessWidget {
                         width: 300,
                         margin: const EdgeInsets.all(10),
                         child: ItemCardHorizontal(
-                          itemCart: cartItems[index],
+                          itemCart:isFromDetail? cartItemFromDetail! : cartItems![index],
                         ),
                       ),
                       Container(
                         margin: const EdgeInsets.all(10),
-                        child: Text(
-                          'x${cartItems[index].quantity}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
+                        child: isFromDetail
+                            ? Text(
+                                'x1',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              )
+                            : Text(
+                                'x${cartItems![index].quantity}',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
                       )
                     ],
                   );
@@ -139,99 +157,96 @@ class CheckoutScreen extends StatelessWidget {
                   color: Colors.grey,
                 ),
               ),
-              child: Obx(
-                () => Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    OrderOverview(
-                        totalCartPrice: controller.totalCartPrice.toDouble()),
-                    Container(
-                      margin:
-                          const EdgeInsets.only(top: 40, right: 20, left: 20),
-                      height: 1,
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.grey,
-                    ),
-                    // PAYMENT
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(left: 20, top: 20),
-                              child: Text(
-                                'Payment Method',
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall,
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20, right: 20),
-                              child: Text(
-                                'Change',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .apply(
-                                      color: TColors.primary,
-                                    ),
-                              ),
-                            ),
-                          ],
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  isFromDetail
+                      ? OrderOverview(
+                          totalCartPrice: cartItemFromDetail!.price.toDouble())
+                      : Obx(
+                          () => OrderOverview(
+                              totalCartPrice:
+                                  controller.totalCartPrice.toDouble()),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 40, top: 10),
-                          child: Image.asset(
-                            'assets/logos/visa.png',
-                            height: 50,
-                            width: 50,
+                  Container(
+                    margin: const EdgeInsets.only(top: 40, right: 20, left: 20),
+                    height: 1,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.grey,
+                  ),
+                  // PAYMENT
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 20, top: 20),
+                            child: Text(
+                              'Payment Method',
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
                           ),
-                        )
-                      ],
-                    ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20, right: 20),
+                            child: Text(
+                              'Change',
+                              style:
+                                  Theme.of(context).textTheme.bodyLarge!.apply(
+                                        color: TColors.primary,
+                                      ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 40, top: 10),
+                        child: Image.asset(
+                          'assets/logos/visa.png',
+                          height: 50,
+                          width: 50,
+                        ),
+                      )
+                    ],
+                  ),
 
-                    // ADDRESS
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(left: 20, top: 20),
-                              child: Text(
-                                'Shipping Address',
-                                style:
-                                    Theme.of(context).textTheme.headlineSmall,
-                              ),
+                  // ADDRESS
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 20, top: 20),
+                            child: Text(
+                              'Shipping Address',
+                              style: Theme.of(context).textTheme.headlineSmall,
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20, right: 20),
-                              child: Text(
-                                'Change',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .apply(
-                                      color: TColors.primary,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 20, top: 10),
-                          child: Text(
-                            '1234 Main Street, New York, NY 10001',
-                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20, right: 20),
+                            child: Text(
+                              'Change',
+                              style:
+                                  Theme.of(context).textTheme.bodyLarge!.apply(
+                                        color: TColors.primary,
+                                      ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 20, top: 10),
+                        child: Text(
+                          '1234 Main Street, New York, NY 10001',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
           ],

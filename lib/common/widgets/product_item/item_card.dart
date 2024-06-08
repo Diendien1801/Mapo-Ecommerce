@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:store/common/widgets/brand_name/brand_name_with_icon.dart';
 import 'package:store/common/widgets/button/add_to_cart_button.dart';
@@ -38,12 +39,26 @@ class ItemCard extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ProductDetailScreen(
-                        productModel: product,
-                      )),
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                transitionDuration: Duration(
+                    milliseconds: 400), // Customize transition duration
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return ProductDetailScreen(
+                    productModel: product,
+                  );
+                },
+                transitionsBuilder: (BuildContext context,
+                    Animation<double> animation,
+                    Animation<double> secondaryAnimation,
+                    Widget child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+              ),
             );
           },
           child: Container(
@@ -54,21 +69,39 @@ class ItemCard extends StatelessWidget {
                   dark ? Colors.grey : const Color.fromARGB(255, 245, 242, 242),
               borderRadius: const BorderRadius.all(Radius.circular(20)),
             ),
-            child: Image.network(
-              product.image,
-              fit: BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) =>
-                  loadingProgress == null
-                      ? child
-                      : Center(
-                          child: Column(
-                            children: [
-                              ShimmerEffect(
-                                  width: 180, height: 180, radius: 20),
-                            ],
-                          ),
-                        ),
+            child: Hero(
+              tag: product.id,
+              child: CachedNetworkImage(
+                imageUrl: product.image,
+                placeholder: (context, url) =>
+                    ShimmerEffect(width: 180, height: 180, radius: 20),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
             ),
+            // child: Image.network(
+            //   product.image,
+            //   fit: BoxFit.contain,
+            //   loadingBuilder: (context, child, loadingProgress) =>
+            //       loadingProgress == null
+            //           ? child
+            //           : Center(
+            //               child: Column(
+            //                 children: [
+            //                   ShimmerEffect(
+            //                       width: 180, height: 180, radius: 20),
+            //                 ],
+            //               ),
+            //             ),
+            // ),
           ),
         ),
 

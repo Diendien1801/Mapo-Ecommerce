@@ -1,13 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import 'package:store/common/widgets/appbar/appbar.dart';
 import 'package:store/common/widgets/choice_chip/choice_chip_cus.dart';
 import 'package:store/common/widgets/sale_tag/sale_tag.dart';
 import 'package:store/features/shop/controllers/brand_controller.dart';
 import 'package:store/features/shop/controllers/cart_controller.dart';
+import 'package:store/features/shop/controllers/order_controller.dart';
+import 'package:store/features/shop/models/brand_model.dart';
 import 'package:store/features/shop/models/product_model.dart';
+import 'package:store/features/shop/views/checkout/checkout.dart';
 import 'package:store/features/shop/views/product_details/widget/remove_and_add.dart';
+import 'package:store/utils/effect/shimmer_effect.dart';
 
 // ignore: must_be_immutable
 class ProductDetailScreen extends StatefulWidget {
@@ -27,9 +33,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final cartController = CartController.instance;
     var itemCart = cartController.convertToCartItem(widget.productModel, 1);
     final brandController = BrandController.instance;
-    var brand = brandController.featuredBrands
+    BrandModel brand = brandController.allBrands
         .where((element) => element.name == widget.productModel.brand)
         .last;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -45,14 +52,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: Stack(
                   children: [
                     //PRODUCT IMAGE
-                    Container(
-                      height: 400,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
+                    Hero(
+                      tag: widget.productModel.id,
+                      child: Container(
+                        height: 400,
+                        width: double.infinity,
                         color: Colors.transparent,
-                        image: DecorationImage(
-                          image: NetworkImage(widget.productModel.image),
-                          fit: BoxFit.contain,
+                        child: CachedNetworkImage(
+                          imageUrl: widget.productModel.image,
+                          placeholder: (context, url) => ShimmerEffect(
+                              height: 400, width: double.infinity),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -173,7 +192,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Container(
                     margin: const EdgeInsets.only(left: 5, top: 10),
                     child: Text(
-                      brand.name,
+                      widget.productModel.brand,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
@@ -283,7 +302,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 width: MediaQuery.of(context).size.width,
                 margin: const EdgeInsets.only(left: 20, top: 30, right: 20),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckoutScreen(
+                          cartItemFromDetail: itemCart,
+                          isFromDetail: true,
+                        ),
+                      ),
+                    );
+                  },
                   child: const Text(
                     'Checkout',
                     style: TextStyle(color: Colors.white),

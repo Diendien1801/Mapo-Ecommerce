@@ -14,7 +14,6 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccountScreen> {
-
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SignupController());
@@ -44,6 +43,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                     Expanded(
                       flex: 1,
                       child: TextFormField(
+                        onTap: () {
+                          //controller.signUpFormKey.currentState?.reset();
+                        },
                         controller: controller.firstName,
                         validator: (value) =>
                             TValidator.validateEmptyText('First name', value),
@@ -60,6 +62,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                     Expanded(
                       flex: 1,
                       child: TextFormField(
+                        onTap: () {
+                          // controller.signUpFormKey.currentState?.reset();
+                        },
                         controller: controller.lastName,
                         validator: (value) =>
                             TValidator.validateEmptyText('Last name', value),
@@ -76,6 +81,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               Container(
                 margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
                 child: TextFormField(
+                  onTap: () {
+                    //controller.signUpFormKey.currentState?.reset();
+                  },
                   controller: controller.userName,
                   validator: (value) =>
                       TValidator.validateEmptyText('User name', value),
@@ -89,6 +97,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               Container(
                 margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
                 child: TextFormField(
+                  onTap: () {
+                    //controller.signUpFormKey.currentState?.reset();
+                  },
                   controller: controller.email,
                   validator: (value) => TValidator.validateEmail(value),
                   decoration: InputDecoration(
@@ -101,6 +112,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               Container(
                 margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
                 child: TextFormField(
+                  onTap: () {
+                    //controller.signUpFormKey.currentState?.reactive();
+                  },
                   controller: controller.phone,
                   validator: (value) => TValidator.validatePhone(value),
                   decoration: InputDecoration(
@@ -153,7 +167,6 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                 margin: const EdgeInsets.only(top: 20, right: 20, left: 20),
                 child: ElevatedButton(
                   onPressed: () {
-                    
                     controller.signUp();
                   },
                   child: const Text("Create Account"),

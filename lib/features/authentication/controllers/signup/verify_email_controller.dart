@@ -44,8 +44,8 @@ class VerifyEmailController extends GetxController {
       final user = FirebaseAuth.instance.currentUser;
       if (user?.emailVerified ?? false) {
         timer.cancel();
-        Get.off(() => SuccessScreen(
-              image: ImageString.staticSuccessIllustration,
+        Get.offAll(() => SuccessScreen(
+              image: ImageString.bannerImage1,
               title: 'Email Verified',
               subTitle: 'Your email has been verified successfully.',
               onPressed: () =>

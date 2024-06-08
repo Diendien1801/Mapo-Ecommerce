@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     final controller = Get.put(ProductController());
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

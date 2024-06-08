@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,23 +48,40 @@ class BannerCustom extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.transparent,
                       ),
-                      child: Image.network(
-                        i.image,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) =>
-                            loadingProgress == null
-                                ? child
-                                : Center(
-                                    child: Column(
-                                      children: [
-                                        ShimmerEffect(
-                                            width: 400,
-                                            height: 170,
-                                            radius: 20),
-                                      ],
-                                    ),
+                      child: CachedNetworkImage(
+                          imageUrl: i.image,
+                          placeholder: (context, url) => ShimmerEffect(
+                                width: 400,
+                                height: 170,
+                              ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          imageBuilder: (context, imageProvider) => Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
                                   ),
-                      ),
+                                ),
+                              )),
+                      // child: Image.network(
+                      //   i.image,
+                      //   fit: BoxFit.cover,
+                      //   loadingBuilder: (context, child, loadingProgress) =>
+                      //       loadingProgress == null
+                      //           ? child
+                      //           : Center(
+                      //               child: Column(
+                      //                 children: [
+                      //                   ShimmerEffect(
+                      //                       width: 400,
+                      //                       height: 170,
+                      //                       radius: 20),
+                      //                 ],
+                      //               ),
+                      //             ),
+                      // ),
                     );
                   },
                 );
