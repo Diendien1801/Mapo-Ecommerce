@@ -1,13 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:store/common/widgets/appbar/appbar.dart';
 import 'package:store/common/widgets/order_overview/order_overview.dart';
 import 'package:store/common/widgets/product_item/item_card_horizontal.dart';
+import 'package:store/data/repositories/authentication/authentication_repository.dart';
 import 'package:store/features/shop/controllers/cart_controller.dart';
 import 'package:store/features/shop/controllers/order_controller.dart';
 import 'package:store/features/shop/models/cart_item_model.dart';
+import 'package:store/features/shop/models/order_model.dart';
 import 'package:store/utils/constants/colors.dart';
 
 class CheckoutScreen extends StatelessWidget {
@@ -27,10 +30,25 @@ class CheckoutScreen extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: InkWell(
         onTap: () {
-          if (isFromDetail)
-            orderController.placeOrderForDetailCheckOut(cartItemFromDetail!);
-          else {
-            orderController.placeOrder();
+          if (isFromDetail) {
+            OrderModel order = OrderModel(
+              userId: AuthenticationRepository.instance.AuthUser!.uid,
+              orderId: (orderController.orders.length + 1).toString(),
+              orderDate: DateTime.now().toString(),
+              cartItems: [cartItemFromDetail!],
+              isDelivered: false,
+              shippingDate: DateTime.now().add(Duration(days: 3)).toString(),
+            );
+            orderController.placeOrderForDetailCheckOut(order);
+          } else {
+            orderController.placeOrder(OrderModel(
+              userId: AuthenticationRepository.instance.AuthUser!.uid,
+              orderId: (orderController.orders.length + 1).toString(),
+              orderDate: DateTime.now().toString(),
+              cartItems: cartItems!,
+              isDelivered: false,
+              shippingDate: DateTime.now().add(Duration(days: 3)).toString(),
+            ));
           }
         },
         child: Container(
@@ -84,7 +102,9 @@ class CheckoutScreen extends StatelessWidget {
                         width: 300,
                         margin: const EdgeInsets.all(10),
                         child: ItemCardHorizontal(
-                          itemCart:isFromDetail? cartItemFromDetail! : cartItems![index],
+                          itemCart: isFromDetail
+                              ? cartItemFromDetail!
+                              : cartItems![index],
                         ),
                       ),
                       Container(

@@ -5,20 +5,23 @@ import 'package:store/common/widgets/order_overview/order_overview.dart';
 import 'package:store/common/widgets/product_item/item_card_horizontal.dart';
 
 import 'package:store/features/shop/models/cart_item_model.dart';
+import 'package:store/features/shop/models/order_model.dart';
 
 // ignore: must_be_immutable
 class OrderDetail extends StatelessWidget {
-  List<CartItemModel> cartItems;
-  String? time;
+  OrderModel order;
+ 
   OrderDetail({
     super.key,
-    required this.cartItems,
-    required this.time,
+    required this.order,
+    
   });
 
   @override
   Widget build(BuildContext context) {
+    
     double totalCartPrice = 0;
+    final cartItems = order.cartItems;
     cartItems.forEach(
         (element) => totalCartPrice += element.price * element.quantity);
     return Material(
@@ -41,7 +44,7 @@ class OrderDetail extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(left: 24),
                 child: Text(
-                  'Expected delivery date: ${time}',
+                  'Expected delivery date: ',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),

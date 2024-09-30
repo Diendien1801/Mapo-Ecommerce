@@ -12,6 +12,7 @@ class FirebaseStorageService extends GetxController {
   /// Return a Uint8List containing image data
   Future<Uint8List> getImageDataFromAsset(String path) async {
     try {
+      //
       final byteData = await rootBundle.load(path);
 
       final imageData = byteData.buffer
@@ -27,6 +28,7 @@ class FirebaseStorageService extends GetxController {
   Future<String> uploadImageData(
       String path, Uint8List image, String name) async {
     try {
+      //.ref -> tham chieu toi goc cua storage -> child -> tham chieu toi thu muc con 
       final ref = _firebaseStorage.ref().child(path).child(name);
       await ref.putData(image);
       final url = await ref.getDownloadURL();

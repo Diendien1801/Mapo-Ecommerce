@@ -18,6 +18,7 @@ class ProductController extends GetxController {
   void onInit() {
     loadDataFromLocalStorage();
 
+    // check if the products are empty -> fetch the products from firebase
     if (allProducts.isEmpty || ikeaProduct.isEmpty || appleProduct.isEmpty) {
       //fetchRandomProducts();
       fetchAllProducts();

@@ -40,22 +40,28 @@ class WishListScreen extends StatelessWidget {
                       return const CircularProgressIndicator();
                     } else {
                       final products = snapshot.data!;
-                      return GridView.builder(
-                        itemCount: products.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          mainAxisExtent: 300,
-                          childAspectRatio: 0.7,
-                        ),
-                        itemBuilder: (context, index) {
-                          return ItemCard(
-                              dark: dark, product: products[index]);
-                        },
-                      );
+                      if (products.isEmpty) {
+                        return const Center(
+                          child: Text('No items in wishlist'),
+                        );
+                      } else {
+                        return GridView.builder(
+                          itemCount: products.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            mainAxisExtent: 300,
+                            childAspectRatio: 0.7,
+                          ),
+                          itemBuilder: (context, index) {
+                            return ItemCard(
+                                dark: dark, product: products[index]);
+                          },
+                        );
+                      }
                     }
                   }),
             ),

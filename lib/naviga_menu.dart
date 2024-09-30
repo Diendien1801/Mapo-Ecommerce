@@ -8,6 +8,8 @@ import 'package:store/features/shop/views/wishlist/wishlist.dart';
 class NavigationMenu extends StatelessWidget {
   final NavigationController navigationController =
       Get.put(NavigationController());
+
+  NavigationMenu({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

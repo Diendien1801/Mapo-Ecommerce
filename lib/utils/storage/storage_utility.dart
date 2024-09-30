@@ -6,7 +6,9 @@ class MyLocalStorage {
   // Singleton instance
   static MyLocalStorage? _instance;
 
-  MyLocalStorage._internal() {} // ??
+  MyLocalStorage._internal() {
+    //_storage = GetStorage();
+  } //
 
   factory MyLocalStorage.instance() {
     _instance ??= MyLocalStorage._internal();

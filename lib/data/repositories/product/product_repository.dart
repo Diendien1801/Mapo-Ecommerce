@@ -10,7 +10,6 @@ import 'package:store/features/shop/models/product_model.dart';
 class ProductRepository extends GetxController {
   static ProductRepository get instance => ProductRepository();
   final _db = FirebaseFirestore.instance;
-  
 
   /// Get limidted featured products
   Future<List<ProductModel>> getRandomProducts() async {
@@ -49,9 +48,39 @@ class ProductRepository extends GetxController {
     }
   }
 
+  // Get data with limit
+  Future<List<ProductModel>> getProductsWithLimit({int limit = 10, String? lastId}) async {
+    try {
+      Query query = _db.collection('Products').limit(limit);
+
+      if (lastId != null) {
+        DocumentSnapshot lastDocument = await _db.collection('Products').doc(lastId).get();
+        query = query.startAfterDocument(lastDocument);
+      }
+
+      final snapshot = await query.get();
+
+      return snapshot.docs
+          .map((doc) => ProductModel.fromSnapshot(doc as DocumentSnapshot<Map<String, dynamic>>))
+          .toList();
+    } on FirebaseException {
+      rethrow;
+    } on PlatformException {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+
   Future<List<ProductModel>> getFavoriteProducts(
       List<String> productIds) async {
+    if (productIds.isEmpty) {
+      // Trả về danh sách rỗng nếu productIds rỗng
+      return [];
+    }
     try {
+      // Lấy danh sách sản phẩm từ productIds 
       final snapshot = await _db
           .collection('Products')
           .where(FieldPath.documentId, whereIn: productIds)
@@ -62,6 +91,7 @@ class ProductRepository extends GetxController {
       if (kDebugMode) {
         print(list);
       }
+
       return list;
     } on FirebaseException {
       rethrow;

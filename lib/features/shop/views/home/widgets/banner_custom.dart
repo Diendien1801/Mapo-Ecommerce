@@ -55,7 +55,7 @@ class BannerCustom extends StatelessWidget {
                                 height: 170,
                               ),
                           errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                              const Icon(Icons.error),
                           imageBuilder: (context, imageProvider) => Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),

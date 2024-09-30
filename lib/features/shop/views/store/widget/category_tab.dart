@@ -7,6 +7,7 @@ import 'package:store/features/shop/controllers/brand_controller.dart';
 import 'package:store/features/shop/controllers/product_controller.dart';
 import 'package:store/features/shop/models/category_model.dart';
 import 'package:store/features/shop/models/product_model.dart';
+import 'package:store/features/shop/views/product/brand_product.dart';
 import 'package:store/utils/helpers/helper_functions.dart';
 
 class CategoryTab extends StatelessWidget {
@@ -19,39 +20,45 @@ class CategoryTab extends StatelessWidget {
   Widget build(BuildContext context) {
     bool dark = THelperFunctions.isDarkMode(context);
     final productController = Get.put(ProductController());
+    // fetch all products in the category
     List<ProductModel> categoryProduct = productController.allProducts
         .where((element) => element.categoryId == category.id)
         .toList();
-    
 
     final brandController = BrandController.instance;
 
-    
     return SingleChildScrollView(
       child: Obx(
-        ()=> Column(
+        () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: BrandCard(
-                brandModel: brandController.allBrands[4],
-                child: Row(
-                  children: List.generate(
-                    3,
-                    (index) => Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(
-                              right: 11, left: 11, top: 10, bottom: 10),
-                          child: RoundImageOnline(
-                              img: productController.ikeaProduct[index].image,
-                              height: 100,
-                              width: 100,
-                              radius: 20,
-                              color: const Color.fromARGB(255, 245, 242, 242)),
-                        ),
-                      ],
+              child: InkWell(
+                onTap: () {
+                  Get.to(() =>
+                      BrandProductScreen(brand: brandController.allBrands[4]));
+                },
+                child: BrandCard(
+                  brandModel: brandController.allBrands[4],
+                  child: Row(
+                    children: List.generate(
+                      3,
+                      (index) => Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(
+                                right: 11, left: 11, top: 10, bottom: 10),
+                            child: RoundImageOnline(
+                                img: productController.ikeaProduct[index].image,
+                                height: 100,
+                                width: 100,
+                                radius: 20,
+                                color:
+                                    const Color.fromARGB(255, 245, 242, 242)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -59,24 +66,32 @@ class CategoryTab extends StatelessWidget {
             ),
             Container(
               margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: BrandCard(
-                brandModel: brandController.allBrands[3],
-                child: Row(
-                  children: List.generate(
-                    3,
-                    (index) => Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(
-                              right: 11, left: 11, top: 10, bottom: 10),
-                          child: RoundImageOnline(
-                              img: productController.appleProduct[index].image,
-                              height: 100,
-                              width: 100,
-                              radius: 20,
-                              color: const Color.fromARGB(255, 245, 242, 242)),
-                        ),
-                      ],
+              child: InkWell(
+                onTap: () {
+                  Get.to(() =>
+                      BrandProductScreen(brand: brandController.allBrands[3]));
+                },
+                child: BrandCard(
+                  brandModel: brandController.allBrands[3],
+                  child: Row(
+                    children: List.generate(
+                      3,
+                      (index) => Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(
+                                right: 11, left: 11, top: 10, bottom: 10),
+                            child: RoundImageOnline(
+                                img:
+                                    productController.appleProduct[index].image,
+                                height: 100,
+                                width: 100,
+                                radius: 20,
+                                color:
+                                    const Color.fromARGB(255, 245, 242, 242)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

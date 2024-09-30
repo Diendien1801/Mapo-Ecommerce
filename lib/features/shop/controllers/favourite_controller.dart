@@ -17,7 +17,9 @@ class FavouriteController extends GetxController {
   }
 
   Future<void> initFavourite() async {
+    // read the favourite list from local storage
     final json = await MyLocalStorage.instance().readData('favorites');
+    // if the json is not null, decode it and assign it to the favourites list
     if (json != null) {
       final storedFavorites = jsonDecode(json) as Map<String, dynamic>;
 
@@ -34,11 +36,14 @@ class FavouriteController extends GetxController {
   }
 
   void toggleFavourite(String id) {
+    // if the product is not in the favourite list, add it
     if (!favourites.containsKey(id)) {
       favourites[id] = true;
       saveFavoritesToStorage();
       Get.snackbar('', 'Product has been added to Wishlist.');
-    } else {
+    } 
+    // if the product is already in the favourite list, remove it
+    else {
       MyLocalStorage.instance().removeData(id);
       favourites.remove(id);
       saveFavoritesToStorage();

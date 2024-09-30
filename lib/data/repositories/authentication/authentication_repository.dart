@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:store/features/authentication/screens/login.dart';
 import 'package:store/features/authentication/screens/onboarding.dart';
 import 'package:store/features/authentication/screens/verify_email.dart';
+import 'package:store/features/shop/controllers/order_controller.dart';
 import 'package:store/naviga_menu.dart';
 import 'package:store/utils/storage/storage_utility.dart';
 
@@ -27,9 +28,11 @@ class AuthenticationRepository extends GetxController {
   }
 
   screenRedirect(User? user) async {
+    final orderController = Get.put(OrderController());
     if (user != null) {
       if (user.emailVerified) {
         await MyLocalStorage.init(user.uid);
+        await OrderController.instance.fetchOrders();
         Get.to(() => NavigationMenu());
       } else {
         Get.to(() => VerifyEmailScreen(email: _auth.currentUser!.email!));

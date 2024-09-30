@@ -9,9 +9,12 @@ import 'package:store/utils/storage/storage_utility.dart';
 
 class BannerController extends GetxController {
   static BannerController get instance => Get.find();
+  // variable to store all banners
   final RxList<BannerModel> allBanners = <BannerModel>[].obs;
+  // variable to store monthly banners
   final RxList<BannerModel> monthlyBanners = <BannerModel>[].obs;
   final bannerRepository = Get.put(BannerRepository());
+  // variable to store current index of carousal
   var carousalCurrentIndex = 0.obs;
 
   void changeIndex(int index) {
@@ -27,7 +30,8 @@ class BannerController extends GetxController {
       fetchBanners();
     }
   }
-
+  
+  // Load data from local storage if available
   void loadDataFromLocalStorage() {
     
     final data = MyLocalStorage.instance().readData('monthlyBanners');
@@ -40,6 +44,7 @@ class BannerController extends GetxController {
     }
   }
 
+  // Fetch banners from the cloud firebase
   Future<void> fetchBanners() async {
     try {
       
@@ -54,6 +59,7 @@ class BannerController extends GetxController {
       final selectedBanners = allBanners.toList()..shuffle(random);
       monthlyBanners.assignAll(selectedBanners.take(3));
 
+      // Store categories in local storage -> fetch from firebase 1 time -> the second time it will be fetched from local storage
       MyLocalStorage.instance().writeData('monthlyBanners',
           monthlyBanners.map((element) => element.toJson()).toList());
 

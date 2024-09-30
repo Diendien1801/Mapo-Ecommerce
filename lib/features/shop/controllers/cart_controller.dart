@@ -16,7 +16,7 @@ class CartController extends GetxController {
   CartController() {
     loadCartItems();
   }
-  // Add items in the cart
+  // Add items in the cart ( Add to cart button with quantity)
   void addToCart(ProductModel product) {
     // Check quantity
     if (productQuantityInCart.value < 1) {
@@ -81,6 +81,7 @@ class CartController extends GetxController {
     final cartItemStrings = MyLocalStorage.instance().readData<List<dynamic>>(
       'cartItems',
     );
+    // check if the cartItemStrings is not null -> convert it to CartItemModel
     if (cartItemStrings != null) {
       cartItems.value = cartItemStrings
           .map((item) => CartItemModel.fromJson(item as Map<String, dynamic>))
@@ -90,6 +91,7 @@ class CartController extends GetxController {
   }
 
   int getProductQuantityInCart(String productId) {
+    // 
     final foundItem = cartItems
         .where((item) => item.productId == productId)
         .fold(0, (previousValue, element) => previousValue + element.quantity);

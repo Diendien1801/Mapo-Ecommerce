@@ -69,37 +69,23 @@ class CategoriesListview extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(100),
                               ),
                               child: Center(
-//                                 child:CachedNetworkImage(
-//   imageUrl: category.image,
-//   placeholder: (context, url) => CircularProgressIndicator(),
-//   errorWidget: (context, url, error) => Icon(Icons.error),
-//   imageBuilder: (context, imageProvider) => Container(
-//     decoration: BoxDecoration(
-//       image: DecorationImage(
-//         image: imageProvider,
-//         fit: BoxFit.contain,
-//       ),
-//     ),
-//   )
-// ),
-                                child: Image.network(
-                                  (category.image),
+                                child: CachedNetworkImage(
+                                  imageUrl: category.image,
                                   height: 30,
                                   width: 30,
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) =>
-                                          loadingProgress == null
-                                              ? child
-                                              : Center(
-                                                  child: Column(
-                                                    children: [
-                                                      ShimmerEffect(
-                                                          width: 50,
-                                                          height: 50,
-                                                          radius: 50),
-                                                    ],
-                                                  ),
-                                                ),
+                                  placeholder: (context, url) => Center(
+                                    child: Column(
+                                      children: [
+                                        ShimmerEffect(
+                                          width: 30,
+                                          height: 30,
+                                          radius: 50,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
                                 ),
                               ),
                             ),

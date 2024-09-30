@@ -7,7 +7,8 @@ import 'package:store/features/shop/models/brand_model.dart';
 class BrandController extends GetxController {
   static BrandController get instance => Get.find();
   final _repository = Get.put(BrandRepository());
-
+   
+  // variable to store all brands
   final RxList<BrandModel> allBrands = <BrandModel>[].obs;
   final RxList<BrandModel> featuredBrands = <BrandModel>[].obs;
   
@@ -17,10 +18,13 @@ class BrandController extends GetxController {
     fetchAllBrands();
   }
 
+  // Fetch brands from the cloud firebase
   Future<void> fetchAllBrands() async {
     try {
+      
       final brands = await _repository.getAllBrand();
       allBrands.assignAll(brands);
+      
       featuredBrands.assignAll(
           brands.where((element) => element.isFeatured == true).toList());
     } catch (e) {
