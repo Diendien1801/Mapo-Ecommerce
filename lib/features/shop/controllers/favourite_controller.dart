@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:store/data/repositories/authentication/authentication_repository.dart';
 import 'package:store/data/repositories/product/product_repository.dart';
 import 'package:store/features/shop/models/product_model.dart';
 import 'package:store/utils/storage/storage_utility.dart';
@@ -18,7 +19,9 @@ class FavouriteController extends GetxController {
 
   Future<void> initFavourite() async {
     // read the favourite list from local storage
-    final json = await MyLocalStorage.instance().readData('favorites');
+    var jsonName =
+        'favorites${AuthenticationRepository.instance.AuthUser?.uid}';
+    final json = await MyLocalStorage.instance().readData(jsonName);
     // if the json is not null, decode it and assign it to the favourites list
     if (json != null) {
       final storedFavorites = jsonDecode(json) as Map<String, dynamic>;
@@ -54,7 +57,7 @@ class FavouriteController extends GetxController {
 
   void saveFavoritesToStorage() {
     final encodeFavorites = json.encode(favourites);
-    MyLocalStorage.instance().writeData('favorites', encodeFavorites);
+    MyLocalStorage.instance().writeData('favorites${AuthenticationRepository.instance.AuthUser?.uid}', encodeFavorites);
   }
 
   Future<List<ProductModel>> favoriteProducts() async {

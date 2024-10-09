@@ -28,7 +28,7 @@ class BannerModel {
         image: data['image'] ?? "",
       );
     } else {
-      return BannerModel.empty();
+      return BannerModel.empty(); 
     }
   }
 
